@@ -1,0 +1,159 @@
+#####psycopg2####
+import psycopg2
+
+user='postgres'
+password='Tory123'
+host='127.0.0.1'
+port=5432
+database='postgres'
+
+conn = psycopg2.connect(user=user,password=password,host=host,port=port,database=database)
+
+if conn:
+    print(f'conn exists')
+else:
+    print('No conn exists')
+
+curr = conn.cursor()
+
+print(curr)
+
+curr.execute('Select * from bookings;')
+result = curr.fetchall()
+
+1. Insert one row using execute()
+
+import psycopg2
+
+sql = """
+INSERT INTO employees (name, department, salary)
+VALUES (%s, %s, %s)
+"""
+
+curr.execute(sql, ("Rahul", "IT", 50000))
+
+conn.commit()
+
+2. Insert multiple rows using executemany()
+
+employees = [
+    ("Rahul", "IT", 50000),
+    ("Amit", "HR", 45000),
+    ("Priya", "Finance", 60000),
+    ("Neha", "IT", 55000)
+]
+
+sql = """
+INSERT INTO employees (name, department, salary)
+VALUES (%s, %s, %s)
+"""
+
+cur.executemany(sql, employees)
+
+conn.commit()
+
+#####WHERE#####
+
+sql = """
+SELECT *
+FROM employees
+WHERE department = %s
+"""
+
+curr.execute(sql, ("IT",))
+
+rows = cur.fetchall()
+
+for row in rows:
+    print(row)
+
+
+sql = """
+SELECT *
+FROM employees
+WHERE salary > %s
+"""
+
+curr.execute(sql, (50000,))
+
+rows = curr.fetchall()
+
+3. Multiple conditions — AND
+
+sql = """
+SELECT *
+FROM employees
+WHERE department = %s
+AND salary > %s
+"""
+
+curr.execute(sql, ("IT", 50000))
+
+rows = cur.fetchall()
+
+4. OR 
+
+sql = """
+SELECT *
+FROM employees
+WHERE department = %s
+OR department = %s
+"""
+
+curr.execute(sql, ("IT", "HR"))
+
+5. LIKE 
+
+sql = """
+SELECT *
+FROM employees
+WHERE name LIKE %s
+"""
+
+cur.execute(sql, ("R%",))
+6. IN
+
+departments = ("IT", "HR", "Finance")
+
+sql = """
+SELECT *
+FROM employees
+WHERE department IN %s
+"""
+
+cur.execute(sql, (departments,))
+
+7. BETWEEN
+
+sql = """
+SELECT *
+FROM employees
+WHERE salary BETWEEN %s AND %s
+"""
+
+curr.execute(sql, (40000, 60000))
+
+NULL  AND NOT NULL
+
+
+sql = """
+SELECT *
+FROM employees
+WHERE department IS NULL
+"""
+
+curr.execute(sql)
+
+
+sql = """
+SELECT *
+FROM employees
+WHERE department IS NOT NULL
+"""
+
+curr.execute(sql)
+
+
+
+
+
